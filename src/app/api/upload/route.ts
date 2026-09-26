@@ -1,6 +1,4 @@
 import { NextResponse } from 'next/server';
-import fs from 'fs';
-import path from 'path';
 
 export async function POST(request: Request) {
   try {
@@ -11,33 +9,26 @@ export async function POST(request: Request) {
       return NextResponse.json({ success: false, error: 'No file uploaded' }, { status: 400 });
     }
 
-    // Size limit check (e.g. 8 MB)
-    const MAX_SIZE = 8 * 1024 * 1024;
+    // Size limit check (max 6 MB for serverless payload)
+    const MAX_SIZE = 6 * 1024 * 1024;
     if (file.size > MAX_SIZE) {
       return NextResponse.json(
-        { success: false, error: 'File size exceeds limit of 8MB' },
+        { success: false, error: 'File size exceeds limit of 6MB' },
         { status: 400 }
       );
     }
 
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
+    const base64 = buffer.toString('base64');
+    const mimeType = file.type || 'application/pdf';
 
-    // Save to public/uploads
-    const uploadsDir = path.join(process.cwd(), 'public', 'uploads');
-    if (!fs.existsSync(uploadsDir)) {
-      fs.mkdirSync(uploadsDir, { recursive: true });
-    }
-
-    const cleanFileName = `${Date.now()}-${file.name.replace(/[^a-zA-Z0-9.-]/g, '_')}`;
-    const filePath = path.join(uploadsDir, cleanFileName);
-    fs.writeFileSync(filePath, buffer);
-
-    const publicUrl = `/uploads/${cleanFileName}`;
+    // Encode as Data URI (works 100% serverlessly on Vercel without filesystem writes)
+    const dataUrl = `data:${mimeType};base64,${base64}`;
 
     return NextResponse.json({
       success: true,
-      url: publicUrl,
+      url: dataUrl,
       filename: file.name,
       size: file.size,
     });
