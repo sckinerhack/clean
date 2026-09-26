@@ -1,11 +1,7 @@
-import mongoose, { Schema, Document, Model } from 'mongoose';
+import mongoose, { Schema, Model } from 'mongoose';
 import { Phone as PhoneInterface } from '@/types/phone';
 
-export interface PhoneDocument extends Omit<PhoneInterface, 'id'>, Document {
-  id: string;
-}
-
-const PhoneSchema = new Schema<PhoneDocument>(
+const PhoneSchema = new Schema<PhoneInterface>(
   {
     id: { type: String, required: true, unique: true, index: true },
     imei: { type: String, required: true, unique: true, index: true, trim: true },
@@ -63,5 +59,5 @@ const PhoneSchema = new Schema<PhoneDocument>(
   }
 );
 
-export const PhoneModel: Model<PhoneDocument> =
-  mongoose.models.Phone || mongoose.model<PhoneDocument>('Phone', PhoneSchema);
+export const PhoneModel: Model<PhoneInterface> =
+  mongoose.models.Phone || mongoose.model<PhoneInterface>('Phone', PhoneSchema);

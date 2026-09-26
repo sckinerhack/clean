@@ -1,6 +1,6 @@
 import { PhoneInput } from '@/types/phone';
 
-const KEY_MAPPINGS: Record<keyof PhoneInput, string[]> = {
+const KEY_MAPPINGS: Partial<Record<keyof PhoneInput, string[]>> = {
   model_description: ['model description', 'model desc', 'description'],
   model_config: ['model config', 'config'],
   model: ['model', 'model name', 'device model'],
