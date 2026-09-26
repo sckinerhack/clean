@@ -10,16 +10,10 @@ import {
   Lock,
   Radio,
   FileText,
-  Calendar,
+  Clock,
   CheckCircle2,
   XCircle,
-  Clock,
-  ExternalLink,
   Cpu,
-  Globe,
-  Tag,
-  Wifi,
-  ShieldAlert,
 } from 'lucide-react';
 
 interface DeviceDetailsCardProps {
@@ -87,21 +81,22 @@ export const DeviceDetailsCard: React.FC<DeviceDetailsCardProps> = ({
   return (
     <div className="bg-white rounded-3xl shadow-xl border border-slate-200/80 overflow-hidden transition-all">
       {/* Header Banner */}
-      <div className="bg-gradient-to-r from-slate-900 via-slate-800 to-indigo-950 text-white p-6 sm:p-8">
+      <div className="bg-gradient-to-r from-slate-900 via-slate-800 to-indigo-950 text-white p-5 sm:p-8">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div className="flex items-start gap-4">
-            <div className="p-3 bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 text-white shadow-inner shrink-0">
-              <Smartphone className="w-8 h-8 text-blue-400" />
+          <div className="flex items-start gap-3 sm:gap-4">
+            <div className="p-2.5 sm:p-3 bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 text-white shadow-inner shrink-0">
+              <Smartphone className="w-6 h-6 sm:w-8 sm:h-8 text-blue-400" />
             </div>
-            <div>
-              <div className="flex items-center gap-3 flex-wrap">
-                <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-white">
+            <div className="min-w-0 flex-1">
+              <div className="flex items-center gap-2.5 flex-wrap">
+                <h2 className="text-lg sm:text-2xl font-bold tracking-tight text-white truncate">
                   {phone.model || phone.model_description || 'Apple iPhone'}
                 </h2>
-                <StatusBadge status={currentStatus} size="lg" />
+                <StatusBadge status={currentStatus} size="sm" />
               </div>
-              <p className="text-slate-300 text-xs sm:text-sm font-mono mt-1">
-                IMEI: <span className="text-white font-semibold">{phone.imei}</span> | Serial:{' '}
+              <p className="text-slate-300 text-xs sm:text-sm font-mono mt-1 break-all">
+                IMEI: <span className="text-white font-semibold">{phone.imei}</span>{' '}
+                <span className="hidden xs:inline">|</span> Serial:{' '}
                 <span className="text-white font-semibold">{phone.serial_number}</span>
               </p>
             </div>
@@ -111,7 +106,7 @@ export const DeviceDetailsCard: React.FC<DeviceDetailsCardProps> = ({
           {phone.invoice_pdf_url && (
             <button
               onClick={() => setIsPdfModalOpen(true)}
-              className="inline-flex items-center gap-2 px-4 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-semibold rounded-xl text-xs sm:text-sm shadow-md transition-all self-start sm:self-auto cursor-pointer"
+              className="inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-semibold rounded-xl text-xs sm:text-sm shadow-md transition-all self-stretch sm:self-auto cursor-pointer shrink-0"
             >
               <FileText className="w-4 h-4" />
               <span>View Invoice PDF</span>
@@ -120,7 +115,7 @@ export const DeviceDetailsCard: React.FC<DeviceDetailsCardProps> = ({
         </div>
 
         {/* Approval Quick Bar */}
-        <div className="mt-6 pt-5 border-t border-slate-700/60 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-white/5 rounded-2xl p-4">
+        <div className="mt-6 pt-5 border-t border-slate-700/60 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 bg-white/5 rounded-2xl p-4">
           <div className="flex items-center gap-2 text-xs sm:text-sm text-slate-300">
             <Clock className="w-4 h-4 text-blue-400 shrink-0" />
             <span>
@@ -132,15 +127,15 @@ export const DeviceDetailsCard: React.FC<DeviceDetailsCardProps> = ({
           </div>
 
           {/* Status Action Buttons */}
-          <div className="flex items-center gap-2 w-full sm:w-auto">
-            <span className="text-xs text-slate-400 font-medium mr-1 hidden sm:inline">
+          <div className="flex items-center gap-2 w-full md:w-auto">
+            <span className="text-xs text-slate-400 font-medium mr-1 hidden md:inline">
               Update Status:
             </span>
 
             <button
               onClick={() => handleStatusChange('Approved')}
               disabled={isUpdating || currentStatus === 'Approved'}
-              className={`flex-1 sm:flex-none flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+              className={`flex-1 md:flex-none flex items-center justify-center gap-1 px-2.5 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
                 currentStatus === 'Approved'
                   ? 'bg-emerald-600 text-white shadow-sm'
                   : 'bg-emerald-500/10 text-emerald-300 hover:bg-emerald-500/20 border border-emerald-500/30'
@@ -153,7 +148,7 @@ export const DeviceDetailsCard: React.FC<DeviceDetailsCardProps> = ({
             <button
               onClick={() => handleStatusChange('Rejected')}
               disabled={isUpdating || currentStatus === 'Rejected'}
-              className={`flex-1 sm:flex-none flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+              className={`flex-1 md:flex-none flex items-center justify-center gap-1 px-2.5 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
                 currentStatus === 'Rejected'
                   ? 'bg-rose-600 text-white shadow-sm'
                   : 'bg-rose-500/10 text-rose-300 hover:bg-rose-500/20 border border-rose-500/30'
@@ -166,7 +161,7 @@ export const DeviceDetailsCard: React.FC<DeviceDetailsCardProps> = ({
             <button
               onClick={() => handleStatusChange('Pending')}
               disabled={isUpdating || currentStatus === 'Pending'}
-              className={`flex-1 sm:flex-none flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+              className={`flex-1 md:flex-none flex items-center justify-center gap-1 px-2.5 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
                 currentStatus === 'Pending'
                   ? 'bg-amber-600 text-white shadow-sm'
                   : 'bg-amber-500/10 text-amber-300 hover:bg-amber-500/20 border border-amber-500/30'
@@ -186,54 +181,54 @@ export const DeviceDetailsCard: React.FC<DeviceDetailsCardProps> = ({
       </div>
 
       {/* Main Grid: 4 Category Cards */}
-      <div className="p-6 sm:p-8 grid grid-cols-1 md:grid-cols-2 gap-6 bg-slate-50/50">
+      <div className="p-4 sm:p-8 grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 bg-slate-50/50">
         {/* Category 1: Device Specifications */}
-        <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-2xs">
-          <div className="flex items-center gap-2.5 mb-4 pb-3 border-b border-slate-100 text-blue-700">
-            <Cpu className="w-5 h-5 text-blue-600" />
-            <h3 className="font-bold text-slate-900 text-base">Device Specifications</h3>
+        <div className="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200 shadow-2xs">
+          <div className="flex items-center gap-2.5 mb-3 pb-2.5 border-b border-slate-100 text-blue-700">
+            <Cpu className="w-5 h-5 text-blue-600 shrink-0" />
+            <h3 className="font-bold text-slate-900 text-sm sm:text-base">Device Specifications</h3>
           </div>
 
-          <dl className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-3 text-xs sm:text-sm">
+          <dl className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-2.5 text-xs sm:text-sm">
             <div>
               <dt className="text-slate-500 font-medium">Model</dt>
-              <dd className="font-semibold text-slate-800">{phone.model || 'N/A'}</dd>
+              <dd className="font-semibold text-slate-800 break-words">{phone.model || 'N/A'}</dd>
             </div>
             <div>
               <dt className="text-slate-500 font-medium">Model Description</dt>
-              <dd className="font-semibold text-slate-800">{phone.model_description || 'N/A'}</dd>
+              <dd className="font-semibold text-slate-800 break-words">{phone.model_description || 'N/A'}</dd>
             </div>
             <div>
               <dt className="text-slate-500 font-medium">Model Config</dt>
-              <dd className="font-mono text-slate-700">{phone.model_config || 'N/A'}</dd>
+              <dd className="font-mono text-slate-700 break-words">{phone.model_config || 'N/A'}</dd>
             </div>
             <div>
               <dt className="text-slate-500 font-medium">Primary IMEI</dt>
-              <dd className="font-mono font-bold text-blue-700">{phone.imei}</dd>
+              <dd className="font-mono font-bold text-blue-700 break-all">{phone.imei}</dd>
             </div>
             <div>
               <dt className="text-slate-500 font-medium">IMEI 2 (eSIM)</dt>
-              <dd className="font-mono text-slate-700">{phone.imei2 || 'N/A'}</dd>
+              <dd className="font-mono text-slate-700 break-all">{phone.imei2 || 'N/A'}</dd>
             </div>
             <div>
               <dt className="text-slate-500 font-medium">MEID</dt>
-              <dd className="font-mono text-slate-700">{phone.meid || 'N/A'}</dd>
+              <dd className="font-mono text-slate-700 break-all">{phone.meid || 'N/A'}</dd>
             </div>
             <div>
               <dt className="text-slate-500 font-medium">Serial Number</dt>
-              <dd className="font-mono font-bold text-slate-900">{phone.serial_number}</dd>
+              <dd className="font-mono font-bold text-slate-900 break-all">{phone.serial_number}</dd>
             </div>
             <div>
               <dt className="text-slate-500 font-medium">Part Number</dt>
-              <dd className="font-mono text-slate-700">{phone.part_number || 'N/A'}</dd>
+              <dd className="font-mono text-slate-700 break-words">{phone.part_number || 'N/A'}</dd>
             </div>
             <div>
               <dt className="text-slate-500 font-medium">Wi-Fi MAC Address</dt>
-              <dd className="font-mono text-slate-700">{phone.wifi_mac || 'N/A'}</dd>
+              <dd className="font-mono text-slate-700 break-all">{phone.wifi_mac || 'N/A'}</dd>
             </div>
             <div>
               <dt className="text-slate-500 font-medium">EID</dt>
-              <dd className="font-mono text-slate-700 truncate">{phone.eid || 'N/A'}</dd>
+              <dd className="font-mono text-slate-700 break-all">{phone.eid || 'N/A'}</dd>
             </div>
             <div>
               <dt className="text-slate-500 font-medium">iOS Version</dt>
@@ -247,16 +242,16 @@ export const DeviceDetailsCard: React.FC<DeviceDetailsCardProps> = ({
         </div>
 
         {/* Category 2: Warranty & Purchase */}
-        <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-2xs">
-          <div className="flex items-center gap-2.5 mb-4 pb-3 border-b border-slate-100 text-indigo-700">
-            <ShieldCheck className="w-5 h-5 text-indigo-600" />
-            <h3 className="font-bold text-slate-900 text-base">Warranty & Purchase Details</h3>
+        <div className="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200 shadow-2xs">
+          <div className="flex items-center gap-2.5 mb-3 pb-2.5 border-b border-slate-100 text-indigo-700">
+            <ShieldCheck className="w-5 h-5 text-indigo-600 shrink-0" />
+            <h3 className="font-bold text-slate-900 text-sm sm:text-base">Warranty & Purchase Details</h3>
           </div>
 
-          <dl className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-3 text-xs sm:text-sm">
+          <dl className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-2.5 text-xs sm:text-sm">
             <div>
               <dt className="text-slate-500 font-medium">Warranty Coverage</dt>
-              <dd className="font-semibold text-indigo-900">
+              <dd className="font-semibold text-indigo-900 break-words">
                 {phone.warranty_status || 'Unknown'}
               </dd>
             </div>
@@ -276,7 +271,7 @@ export const DeviceDetailsCard: React.FC<DeviceDetailsCardProps> = ({
             </div>
             <div>
               <dt className="text-slate-500 font-medium">Sold By</dt>
-              <dd className="font-semibold text-slate-800">{phone.product_sold_by || 'N/A'}</dd>
+              <dd className="font-semibold text-slate-800 break-words">{phone.product_sold_by || 'N/A'}</dd>
             </div>
             <div>
               <dt className="text-slate-500 font-medium">Purchase Country</dt>
@@ -296,13 +291,13 @@ export const DeviceDetailsCard: React.FC<DeviceDetailsCardProps> = ({
         </div>
 
         {/* Category 3: Security & Locks */}
-        <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-2xs">
-          <div className="flex items-center gap-2.5 mb-4 pb-3 border-b border-slate-100 text-rose-700">
-            <Lock className="w-5 h-5 text-rose-600" />
-            <h3 className="font-bold text-slate-900 text-base">Security & Locks</h3>
+        <div className="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200 shadow-2xs">
+          <div className="flex items-center gap-2.5 mb-3 pb-2.5 border-b border-slate-100 text-rose-700">
+            <Lock className="w-5 h-5 text-rose-600 shrink-0" />
+            <h3 className="font-bold text-slate-900 text-sm sm:text-base">Security & Locks</h3>
           </div>
 
-          <dl className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-3 text-xs sm:text-sm">
+          <dl className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-2.5 text-xs sm:text-sm">
             <div>
               <dt className="text-slate-500 font-medium">MDM Lock</dt>
               <dd
@@ -347,16 +342,16 @@ export const DeviceDetailsCard: React.FC<DeviceDetailsCardProps> = ({
         </div>
 
         {/* Category 4: Carrier & Activation */}
-        <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-2xs">
-          <div className="flex items-center gap-2.5 mb-4 pb-3 border-b border-slate-100 text-emerald-700">
-            <Radio className="w-5 h-5 text-emerald-600" />
-            <h3 className="font-bold text-slate-900 text-base">Carrier & Activation Policies</h3>
+        <div className="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200 shadow-2xs">
+          <div className="flex items-center gap-2.5 mb-3 pb-2.5 border-b border-slate-100 text-emerald-700">
+            <Radio className="w-5 h-5 text-emerald-600 shrink-0" />
+            <h3 className="font-bold text-slate-900 text-sm sm:text-base">Carrier & Activation Policies</h3>
           </div>
 
-          <dl className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-3 text-xs sm:text-sm">
+          <dl className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-2.5 text-xs sm:text-sm">
             <div>
               <dt className="text-slate-500 font-medium">Carrier Name</dt>
-              <dd className="font-semibold text-slate-800">{phone.carrier_name || 'Unlocked'}</dd>
+              <dd className="font-semibold text-slate-800 break-words">{phone.carrier_name || 'Unlocked'}</dd>
             </div>
             <div>
               <dt className="text-slate-500 font-medium">GSX SIM Unlocked</dt>
@@ -377,23 +372,23 @@ export const DeviceDetailsCard: React.FC<DeviceDetailsCardProps> = ({
             </div>
             <div>
               <dt className="text-slate-500 font-medium">ICCID</dt>
-              <dd className="font-mono text-slate-700 truncate">{phone.iccid || 'N/A'}</dd>
+              <dd className="font-mono text-slate-700 break-all">{phone.iccid || 'N/A'}</dd>
             </div>
             <div className="sm:col-span-2">
               <dt className="text-slate-500 font-medium">Initial Activation Policy</dt>
-              <dd className="font-medium text-slate-700">
+              <dd className="font-medium text-slate-700 break-words">
                 {phone.initial_activation_policy_details || phone.initial_activation_policy_id || 'N/A'}
               </dd>
             </div>
             <div className="sm:col-span-2">
               <dt className="text-slate-500 font-medium">Applied Activation Policy</dt>
-              <dd className="font-medium text-slate-700">
+              <dd className="font-medium text-slate-700 break-words">
                 {phone.applied_activation_details || phone.applied_activation_policy_id || 'N/A'}
               </dd>
             </div>
             <div className="sm:col-span-2">
               <dt className="text-slate-500 font-medium">Next Tether Policy</dt>
-              <dd className="font-medium text-slate-700">
+              <dd className="font-medium text-slate-700 break-words">
                 {phone.next_tether_policy_details || phone.next_tether_policy_id || 'N/A'}
               </dd>
             </div>

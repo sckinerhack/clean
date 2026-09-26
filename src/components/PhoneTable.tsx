@@ -9,13 +9,10 @@ import {
   Search,
   FileText,
   Eye,
-  Filter,
-  ArrowUpDown,
   Smartphone,
-  CheckCircle2,
-  XCircle,
-  Clock,
   Trash2,
+  Calendar,
+  Hash,
 } from 'lucide-react';
 
 interface PhoneTableProps {
@@ -85,7 +82,7 @@ export const PhoneTable: React.FC<PhoneTableProps> = ({
               <button
                 key={status}
                 onClick={() => setSelectedStatus(status)}
-                className={`px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all whitespace-nowrap cursor-pointer ${
+                className={`px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all whitespace-nowrap cursor-pointer ${
                   isSelected
                     ? 'bg-slate-900 text-white shadow-sm'
                     : 'bg-slate-100 text-slate-600 hover:bg-slate-200/70 hover:text-slate-900'
@@ -101,7 +98,7 @@ export const PhoneTable: React.FC<PhoneTableProps> = ({
         </div>
 
         {/* Text Search Input */}
-        <div className="relative flex-1 max-w-md">
+        <div className="relative flex-1 w-full md:max-w-md">
           <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
           <input
             type="text"
@@ -121,8 +118,97 @@ export const PhoneTable: React.FC<PhoneTableProps> = ({
         </div>
       </div>
 
-      {/* Main Table */}
-      <div className="bg-white rounded-3xl shadow-lg border border-slate-200/80 overflow-hidden">
+      {/* MOBILE CARD VIEW (visible on screens smaller than md) */}
+      <div className="grid grid-cols-1 gap-4 md:hidden">
+        {filteredPhones.length === 0 ? (
+          <div className="bg-white p-8 rounded-3xl text-center text-slate-400 border border-slate-200">
+            <Smartphone className="w-10 h-10 mx-auto mb-2 text-slate-300" />
+            <p className="text-sm font-medium">No devices matched your search or status filter.</p>
+          </div>
+        ) : (
+          filteredPhones.map((phone) => (
+            <div
+              key={phone.id}
+              onClick={() => onSelectPhone && onSelectPhone(phone)}
+              className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-3 cursor-pointer hover:border-blue-300 transition-colors"
+            >
+              {/* Card Header: Model & Status */}
+              <div className="flex items-start justify-between gap-2">
+                <div>
+                  <h3 className="font-bold text-slate-900 text-base">
+                    {phone.model || 'iPhone Device'}
+                  </h3>
+                  <div className="flex items-center gap-1.5 text-slate-500 text-xs mt-0.5">
+                    <Calendar className="w-3.5 h-3.5 text-slate-400" />
+                    <span>{formatDate(phone.approval_request_date)}</span>
+                  </div>
+                </div>
+                <StatusBadge status={phone.approval_status} size="sm" />
+              </div>
+
+              {/* Identifier details */}
+              <div className="bg-slate-50 p-3 rounded-xl text-xs space-y-1 font-mono">
+                <div className="flex justify-between items-center text-slate-700">
+                  <span className="text-slate-400 font-sans">IMEI:</span>
+                  <span className="font-semibold text-blue-700">{phone.imei}</span>
+                </div>
+                <div className="flex justify-between items-center text-slate-700">
+                  <span className="text-slate-400 font-sans">Serial:</span>
+                  <span className="font-semibold uppercase">{phone.serial_number}</span>
+                </div>
+              </div>
+
+              {/* Actions Footer */}
+              <div className="pt-2 border-t border-slate-100 flex items-center justify-between" onClick={(e) => e.stopPropagation()}>
+                {phone.invoice_pdf_url ? (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setActivePdfUrl(phone.invoice_pdf_url || null);
+                      setActivePdfTitle(`${phone.model || 'Device'} Invoice`);
+                    }}
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-blue-700 bg-blue-50 border border-blue-200 hover:bg-blue-100 transition-colors"
+                  >
+                    <FileText className="w-3.5 h-3.5" />
+                    <span>View PDF</span>
+                  </button>
+                ) : (
+                  <span className="text-slate-400 text-xs">No Invoice PDF</span>
+                )}
+
+                <div className="flex items-center gap-2">
+                  <Link
+                    href={`/?q=${encodeURIComponent(phone.imei)}`}
+                    className="p-2 text-slate-600 hover:text-blue-600 bg-slate-100 hover:bg-blue-50 rounded-xl transition-colors"
+                    title="View details"
+                  >
+                    <Eye className="w-4 h-4" />
+                  </Link>
+
+                  {onDeletePhone && (
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        e.preventDefault();
+                        const deleteId = phone.id || (phone as any)._id || phone.imei;
+                        onDeletePhone(deleteId);
+                      }}
+                      className="p-2 text-slate-400 hover:text-rose-600 bg-slate-100 hover:bg-rose-50 rounded-xl transition-colors"
+                      title="Delete record"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  )}
+                </div>
+              </div>
+            </div>
+          ))
+        )}
+      </div>
+
+      {/* DESKTOP TABLE VIEW (visible on md and larger) */}
+      <div className="hidden md:block bg-white rounded-3xl shadow-lg border border-slate-200/80 overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
